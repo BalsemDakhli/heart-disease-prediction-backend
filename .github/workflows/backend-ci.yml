@@ -1,0 +1,36 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Java 21 with Maven cache
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      # Step 3: Build and run tests
+      - name: Build & Test
+        run: mvn clean verify
+
+      # Step 4: Run Linter (Optional)
+      - name: Check code formatting with Checkstyle
+        run: mvn checkstyle:check || echo "No Checkstyle plugin configured"
+
+      # Step 5: Package JAR
+      - name: Package application
+        run: mvn package -DskipTests
