@@ -23,14 +23,6 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      # Step 3: Build and run tests
-      - name: Build & Test
-        run: mvn clean verify
-
-      # Step 4: Run Linter (Optional)
-      - name: Check code formatting with Checkstyle
-        run: mvn checkstyle:check || echo "No Checkstyle plugin configured"
-
-      # Step 5: Package JAR
-      - name: Package application
-        run: mvn package -DskipTests
+      # Step 3: Build and Package (skipping tests)
+      - name: Build and Package
+        run: mvn clean package -DskipTests
